@@ -8,7 +8,7 @@
         <version>3.2.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.insider</groupId>
+    <groupId>com.hakantatli</groupId>
     <artifactId>event-ingestion</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>event-ingestion</name>

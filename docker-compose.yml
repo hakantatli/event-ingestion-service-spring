@@ -5,8 +5,8 @@ services:
     image: clickhouse/clickhouse-server:latest-alpine
     container_name: clickhouse-server-event-ingestion-spring
     ports:
-      - "8124:8123" # HTTP port (Avoid conflict with Go if both run)
-      - "9001:9000" # Native port (Avoid conflict with Go if both run)
+      - "8124:8123" # HTTP port
+      - "9001:9000" # Native port
     environment:
       - CLICKHOUSE_USER=event_user
       - CLICKHOUSE_PASSWORD=event_password
