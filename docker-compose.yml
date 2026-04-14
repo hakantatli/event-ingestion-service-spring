@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest-alpine
+    container_name: clickhouse-server-event-ingestion-spring
+    ports:
+      - "8124:8123" # HTTP port (Avoid conflict with Go if both run)
+      - "9001:9000" # Native port (Avoid conflict with Go if both run)
+    environment:
+      - CLICKHOUSE_USER=event_user
+      - CLICKHOUSE_PASSWORD=event_password
+      - CLICKHOUSE_DB=events_db
+    volumes:
+      - clickhouse-data-spring:/var/lib/clickhouse
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8123/ping"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: event-ingestion-api-spring
+    ports:
+      - "8080:8080"
+    environment:
+      - CLICKHOUSE_ADDR=clickhouse:8123
+    depends_on:
+      clickhouse:
+        condition: service_healthy
+    restart: on-failure
+
+volumes:
+  clickhouse-data-spring:

@@ -1,0 +1,18 @@
+server:
+  port: 8080
+
+spring:
+  cache:
+    cache-names: metrics
+    caffeine:
+      spec: expireAfterWrite=10s
+
+app:
+  clickhouse:
+    url: jdbc:clickhouse://${CLICKHOUSE_ADDR:localhost:8123}/events_db
+    user: ${CLICKHOUSE_USER:event_user}
+    password: ${CLICKHOUSE_PASSWORD:event_password}
+  batcher:
+    queue-capacity: 1000000
+    batch-size: 50000
+    flush-interval-ms: 50
